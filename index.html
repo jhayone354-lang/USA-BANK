@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chase Online Banking</title>
+
+<style>
+/* CSS RESET & VARS */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --chase-blue: #117aca;
+    --chase-dark: #0a4e82;
+    --chase-navy: #0f172a;
+    --bg-gray: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --danger-red: #dc2626;
+    --success-green: #16a34a;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--bg-gray);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-primary);
+}
+
+/* APP SHELL */
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* HEADER */
+.header {
+    background: var(--chase-blue);
+    color: #ffffff;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.user-info h2 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.user-info p {
+    font-size: 11px;
+    opacity: 0.85;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* VIEWS */
+.view {
+    display: none;
+    flex: 1;
+    padding-bottom: 75px;
+}
+
+.view.active {
+    display: block;
+}
+
+/* CARD UI */
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.balance-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-card::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 50%;
+}
+
+.account-type {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+
+.account-number {
+    font-size: 13px;
+    color: #cbd5e1;
+    font-family: monospace;
+    margin-bottom: 16px;
+}
+
+.balance-label {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.balance-amount {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 4px 0 20px 0;
+}
+
+/* ACTION BUTTONS */
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-send {
+    background: var(--chase-blue);
+    color: white;
+}
+
+.btn-send:hover {
+    background: var(--chase-dark);
+}
+
+.btn-receive {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.btn-receive:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* SECTION HEADERS */
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 16px 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.see-all-link {
+    font-size: 13px;
+    color: var(--chase-blue);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* TRANSACTION LIST */
+.tx-list {
+    background: white;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tx-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tx-item:last-child {
+    border-bottom: none;
+}
+
+.tx-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+}
+
+.tx-details {
+    flex: 1;
+}
+
+.tx-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.tx-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.tx-amount {
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.tx-amount.negative {
+    color: var(--text-primary);
+}
+
+.tx-amount.positive {
+    color: var(--success-green);
+}
+
+/* MODALS */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 20px 20px 0 0;
+    padding: 24px;
+    animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--chase-blue);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--chase-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: 65px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 25%;
+}
+
+.nav-item.active {
+    color: var(--chase-blue);
+}
+
+.nav-item svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+/* HISTORY FILTERS */
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: var(--bg-gray);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+
+.filter-chip.active {
+    background: var(--chase-blue);
+    color: white;
+}
+
+.tx-count-banner {
+    padding: 10px 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--bg-gray);
+    border-bottom: 1px solid var(--border-color);
+}
+</style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- TOP HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <a href="https://ibb.co/7tqzZtqr" target="_blank">
+                <img src="https://i.ibb.co/8gHBfgHP/IMG-5407.jpg" alt="Derrick Henry" class="user-avatar">
+            </a>
+            <div class="user-info">
+                <h2>Derrick Henry</h2>
+                <p>Premier Checking •• 4821</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" aria-label="Notifications">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN HOME VIEW -->
+    <div id="homeView" class="view active">
+        <div class="card balance-card">
+            <div class="account-type">Total Available Balance</div>
+            <div class="account-number">Account: 9876-0048-2100</div>
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-amount" id="mainBalanceDisplay">$455,527.52</div>
+
+            <div class="action-grid">
+                <button class="btn-action btn-send" onclick="openModal('sendModal')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                    Send Money
+                </button>
+                <button class="btn-action btn-receive" onclick="openModal('receiveModal')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                    Request / Receive
+                </button>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span>Recent Activity</span>
+            <span class="see-all-link" onclick="switchView('historyView')">View All (399)</span>
+        </div>
+
+        <div class="tx-list" id="recentTxList">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+
+    <!-- HISTORY PAGE VIEW -->
+    <div id="historyView" class="view">
+        <div class="filter-bar">
+            <button class="filter-chip active">All Transactions</button>
+            <button class="filter-chip">Mortgage Fees</button>
+            <button class="filter-chip">Transfers</button>
+            <button class="filter-chip">Bank Fees</button>
+        </div>
+
+        <div class="tx-count-banner">
+            Showing 399 transactions from Feb 2025 to Aug 2026
+        </div>
+
+        <div class="tx-list" id="fullTxList">
+            <!-- Full transaction history generated via JavaScript -->
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="navHome" onclick="switchView('homeView')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" id="navHistory" onclick="switchView('historyView')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>History</span>
+        </button>
+        <button class="nav-item" onclick="openModal('sendModal')">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span>Pay & Transfer</span>
+        </button>
+        <button class="nav-item" onclick="alert('Services page available on desktop portal.')">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Services</span>
+        </button>
+    </nav>
+
+</div>
+
+<!-- SEND MONEY MODAL -->
+<div class="modal" id="sendModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Send Money</div>
+            <button class="close-btn" onclick="closeModal('sendModal')">✕</button>
+        </div>
+        <form id="sendForm">
+            <div class="form-group">
+                <label>Recipient Name</label>
+                <input type="text" placeholder="e.g. Marcus Vance" required>
+            </div>
+            <div class="form-group">
+                <label>Account / Zelle Tag</label>
+                <input type="text" placeholder="Phone or Email" required>
+            </div>
+            <div class="form-group">
+                <label>Amount ($)</label>
+                <input type="number" placeholder="0.00" min="1" step="any" required>
+            </div>
+            <button type="submit" class="btn-submit">Confirm Transfer</button>
+        </form>
+    </div>
+</div>
+
+<!-- RECEIVE MONEY MODAL -->
+<div class="modal" id="receiveModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Request Money</div>
+            <button class="close-btn" onclick="closeModal('receiveModal')">✕</button>
+        </div>
+        <form id="receiveForm">
+            <div class="form-group">
+                <label>Request From</label>
+                <input type="text" placeholder="e.g. Sarah Jenkins" required>
+            </div>
+            <div class="form-group">
+                <label>Amount ($)</label>
+                <input type="number" placeholder="0.00" min="1" step="any" required>
+            </div>
+            <button type="submit" class="btn-submit">Send Payment Request</button>
+        </form>
+    </div>
+</div>
+
+<script>
+// INITIAL DATA & SETUP
+let currentBalance = 455527.52;
+
+// LIST OF USA NAMES FOR WIRE/TRANSFER TRANSACTIONS
+const usaNames = [
+    "Marcus Vance", "Sarah Jenkins", "Tyler Brooks", "Jessica Miller",
+    "Austin Reynolds", "Samantha Hayes", "Brandon Sterling", "Emily Watson",
+    "Christopher Davis", "Amanda Pearson", "David Holloway", "Megan Sullivan"
+];
+
+const foodVendors = [
+    "Whole Foods Market", "Trader Joe's", "Chipotle Mexican Grill", "Panera Bread",
+    "Starbucks Coffee", "Sweetgreen", "Chick-fil-A", "In-N-Out Burger", "Uber Eats"
+];
+
+const retailVendors = [
+    "Chevron Gas Station", "Target Superstore", "Amazon.com Purchase",
+    "Apple Store Purchase", "CVS Pharmacy", "Home Depot"
+];
+
+// GENERATE 399 REALISTIC TRANSACTIONS (FEB 2025 TO AUG 2026)
+function generateTransactions() {
+    const txs = [];
+    
+    // Explicit Required Dates & Specific Amounts
+    const mortAmounts = {
+        "Aug 20, 2026": -850.52,
+        "Jul 20, 2026": -850.18,
+        "Jun 20, 2026": -850.74,
+        "May 20, 2026": -850.33,
+        "Apr 20, 2026": -850.89,
+        "Mar 20, 2026": -850.45,
+        "Feb 20, 2026": -850.12,
+        "Jan 20, 2026": -850.60,
+        "Dec 20, 2025": -850.25,
+        "Nov 20, 2025": -850.91,
+        "Oct 20, 2025": -850.40,
+        "Sep 20, 2025": -850.15,
+        "Aug 20, 2025": -850.80,
+        "Jul 20, 2025": -850.30,
+        "Jun 20, 2025": -850.65,
+        "May 20, 2025": -850.22,
+        "Apr 20, 2025": -850.95,
+        "Mar 20, 2025": -850.10,
+        "Feb 20, 2025": -850.50
+    };
+
+    // Specific Highlight Transfers (Aug 2026 Descending)
+    txs.push({ name: "Wire Transfer to Marcus Vance", date: "Aug 22, 2026 • 04:15 PM", amount: -2800.00, type: "transfer" });
+    txs.push({ name: "Mortgage fee", date: "Aug 20, 2026 • 08:00 AM", amount: mortAmounts["Aug 20, 2026"], type: "mortgage" });
+    txs.push({ name: "Transfer to Sarah Jenkins", date: "Aug 18, 2026 • 02:30 PM", amount: -3662.00, type: "transfer" });
+    txs.push({ name: "Bank Maintenance Fee", date: "Aug 15, 2026 • 11:59 PM", amount: -200.00, type: "fee" });
+    txs.push({ name: "Wire Transfer to Tyler Brooks", date: "Aug 12, 2026 • 09:10 AM", amount: -5003.00, type: "transfer" });
+    txs.push({ name: "Transfer to Jessica Miller", date: "Aug 05, 2026 • 01:45 PM", amount: -2990.00, type: "transfer" });
+
+    // Generate historic records back to Feb 2025
+    const months = [
+        { name: "Jul", year: 2026 }, { name: "Jun", year: 2026 }, { name: "May", year: 2026 },
+        { name: "Apr", year: 2026 }, { name: "Mar", year: 2026 }, { name: "Feb", year: 2026 },
+        { name: "Jan", year: 2026 }, { name: "Dec", year: 2025 }, { name: "Nov", year: 2025 },
+        { name: "Oct", year: 2025 }, { name: "Sep", year: 2025 }, { name: "Aug", year: 2025 },
+        { name: "Jul", year: 2025 }, { name: "Jun", year: 2025 }, { name: "May", year: 2025 },
+        { name: "Apr", year: 2025 }, { name: "Mar", year: 2025 }, { name: "Feb", year: 2025 }
+    ];
+
+    let currentTxCount = txs.length;
+
+    months.forEach((m) => {
+        const key = `${m.name} 20, ${m.year}`;
+        
+        // Add 20th Mortgage Fee
+        txs.push({
+            name: "Mortgage fee",
+            date: `${m.name} 20, ${m.year} • 08:00 AM`,
+            amount: mortAmounts[key] || -850.52,
+            type: "mortgage"
+        });
+
+        // Add monthly bank fees from prompt (-100, -194, -293)
+        const feeAmt = [ -100.00, -194.00, -293.00 ][Math.floor(Math.random() * 3)];
+        txs.push({
+            name: "Bank Maintenance Fee",
+            date: `${m.name} 28, ${m.year} • 11:59 PM`,
+            amount: feeAmt,
+            type: "fee"
+        });
+
+        // Fill remaining month with standard transactions (~20 per month to reach 399)
+        for (let day = 27; day >= 1; day--) {
+            if (day === 20) continue; // Skip 20th to leave room for mortgage fee
+            
+            if (Math.random() > 0.35 && currentTxCount < 399) {
+                const isFood = Math.random() > 0.4;
+                let txName, txAmount;
+
+                if (isFood) {
+                    txName = foodVendors[Math.floor(Math.random() * foodVendors.length)];
+                    txAmount = -(90 + Math.random() * 20).toFixed(2); // Food ~$100
+                } else {
+                    txName = retailVendors[Math.floor(Math.random() * retailVendors.length)];
+                    txAmount = -(45 + Math.random() * 150).toFixed(2);
+                }
+
+                const hour = Math.floor(Math.random() * 12) + 1;
+                const min = Math.floor(Math.random() * 50) + 10;
+                const ampm = Math.random() > 0.5 ? 'AM' : 'PM';
+
+                txs.push({
+                    name: txName,
+                    date: `${m.name} ${day < 10 ? '0' + day : day}, ${m.year} • ${hour < 10 ? '0' + hour : hour}:${min} ${ampm}`,
+                    amount: parseFloat(txAmount),
+                    type: isFood ? "food" : "retail"
+                });
+                currentTxCount++;
+            }
+        }
+    });
+
+    return txs;
+}
+
+const allTransactions = generateTransactions();
+
+// RENDER TRANSACTIONS
+function renderTransactions() {
+    const recentContainer = document.getElementById('recentTxList');
+    const fullContainer = document.getElementById('fullTxList');
+
+    recentContainer.innerHTML = '';
+    fullContainer.innerHTML = '';
+
+    allTransactions.forEach((tx, index) => {
+        const isNegative = tx.amount < 0;
+        const formattedAmount = (isNegative ? '-$' : '+$') + Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        
+        let iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`;
+        if (tx.type === "mortgage") {
+            iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>`;
+        } else if (tx.type === "transfer") {
+            iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+        } else if (tx.type === "food") {
+            iconSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>`;
+        }
+
+        const html = `
+            <div class="tx-item">
+                <div class="tx-icon">${iconSvg}</div>
+                <div class="tx-details">
+                    <div class="tx-name">${tx.name}</div>
+                    <div class="tx-date">${tx.date}</div>
+                </div>
+                <div class="tx-amount ${isNegative ? 'negative' : 'positive'}">${formattedAmount}</div>
+            </div>
+        `;
+
+        // Add first 10 items to Home view
+        if (index < 10) {
+            recentContainer.innerHTML += html;
+        }
+
+        // Add all items to History view
+        fullContainer.innerHTML += html;
+    });
+}
+
+// VIEW SWITCHING
+function switchView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    document.getElementById(viewId).classList.add('active');
+
+    if (viewId === 'homeView') {
+        document.getElementById('navHome').classList.add('active');
+    } else if (viewId === 'historyView') {
+        document.getElementById('navHistory').classList.add('active');
+    }
+
+    window.scrollTo(0, 0);
+}
+
+// MODALS
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add('active');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+// FORM HANDLING
+document.getElementById('sendForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const recipient = this.querySelector('input[type="text"]').value;
+    const amount = parseFloat(this.querySelector('input[type="number"]').value);
+
+    if (amount > currentBalance) {
+        alert('Insufficient funds available.');
+        return;
+    }
+
+    currentBalance -= amount;
+    updateBalanceDisplay();
+
+    // Add transaction to list
+    const now = new Date();
+    const timeStr = now.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) + ' • Just now';
+    
+    allTransactions.unshift({
+        name: `Transfer to ${recipient}`,
+        date: timeStr,
+        amount: -amount,
+        type: "transfer"
+    });
+
+    renderTransactions();
+    closeModal('sendModal');
+    this.reset();
+    alert(`Successfully transferred $${amount.toFixed(2)} to ${recipient}`);
+});
+
+document.getElementById('receiveForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const sender = this.querySelector('input[type="text"]').value;
+    const amount = parseFloat(this.querySelector('input[type="number"]').value);
+
+    closeModal('receiveModal');
+    this.reset();
+    alert(`Payment request of $${amount.toFixed(2)} sent to ${sender}`);
+});
+
+function updateBalanceDisplay() {
+    document.getElementById('mainBalanceDisplay').textContent = '$' + currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// INITIALIZE
+renderTransactions();
+</script>
+
+</body>
+</html>
