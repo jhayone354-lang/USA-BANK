@@ -17,21 +17,22 @@
 :root {
     --chase-blue: #117aca;
     --chase-dark: #0a4e82;
-    --chase-navy: #0f172a;
+    --chase-navy: #002d62;
     --bg-gray: #f4f6f8;
     --card-bg: #ffffff;
     --text-primary: #1e293b;
     --text-secondary: #64748b;
     --border-color: #e2e8f0;
     --danger-red: #dc2626;
-    --success-green: #16a34a;
+    --success-green: #15803d;
+    --pending-yellow: #b45309;
 }
 
 html, body {
     width: 100%;
     min-height: 100vh;
     overflow-x: hidden;
-    background: var(--bg-gray);
+    background: #001e43;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text-primary);
 }
@@ -45,20 +46,21 @@ html, body {
     display: flex;
     flex-direction: column;
     position: relative;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    box-shadow: 0 0 25px rgba(0,0,0,0.3);
 }
 
 /* HEADER */
 .header {
-    background: var(--chase-blue);
+    background: var(--chase-navy);
     color: #ffffff;
-    padding: 16px;
+    padding: 12px 16px 16px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .header-left {
@@ -72,34 +74,28 @@ html, body {
     height: 44px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.8);
+    border: 2px solid #38bdf8;
 }
 
 .user-info h2 {
     font-size: 16px;
     font-weight: 600;
     line-height: 1.2;
+    color: #ffffff;
 }
 
 .user-info p {
     font-size: 11px;
-    opacity: 0.85;
+    color: #93c5fd;
 }
 
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.icon-btn {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.fdic-badge {
+    font-size: 9px;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #93c5fd;
+    font-weight: 700;
 }
 
 /* VIEWS */
@@ -107,6 +103,7 @@ html, body {
     display: none;
     flex: 1;
     padding-bottom: 75px;
+    background: var(--bg-gray);
 }
 
 .view.active {
@@ -124,29 +121,22 @@ html, body {
 }
 
 .balance-card {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(135deg, #002d62 0%, #117aca 100%);
     color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.balance-card::after {
-    content: '';
-    position: absolute;
-    right: -20px;
-    bottom: -20px;
-    width: 140px;
-    height: 140px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 50%;
+    padding: 20px;
+    margin: 16px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(17, 122, 202, 0.25);
+    border: none;
 }
 
 .account-type {
     font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #94a3b8;
-    margin-bottom: 6px;
+    letter-spacing: 0.8px;
+    color: #93c5fd;
+    font-weight: 600;
+    margin-bottom: 4px;
 }
 
 .account-number {
@@ -157,12 +147,13 @@ html, body {
 }
 
 .balance-label {
-    font-size: 12px;
-    color: #94a3b8;
+    font-size: 11px;
+    color: #93c5fd;
+    text-transform: uppercase;
 }
 
 .balance-amount {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 700;
     letter-spacing: -0.5px;
     margin: 4px 0 20px 0;
@@ -190,39 +181,54 @@ html, body {
 }
 
 .btn-send {
-    background: var(--chase-blue);
-    color: white;
-}
-
-.btn-send:hover {
-    background: var(--chase-dark);
+    background: #ffffff;
+    color: var(--chase-navy);
 }
 
 .btn-receive {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.18);
     color: white;
-}
-
-.btn-receive:hover {
-    background: rgba(255, 255, 255, 0.25);
 }
 
 /* SECTION HEADERS */
 .section-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 20px 16px 10px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 16px 16px 8px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--text-primary);
 }
 
 .see-all-link {
     font-size: 13px;
     color: var(--chase-blue);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
+}
+
+/* SEARCH BAR */
+.search-container {
+    padding: 12px 16px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+    outline: none;
+    background: var(--bg-gray);
+}
+
+.search-input:focus {
+    background: #ffffff;
+    border-color: var(--chase-blue);
 }
 
 /* TRANSACTION LIST */
@@ -238,6 +244,7 @@ html, body {
     justify-content: space-between;
     padding: 14px 16px;
     border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
 .tx-item:last-child {
@@ -254,7 +261,7 @@ html, body {
     justify-content: center;
     margin-right: 12px;
     flex-shrink: 0;
-    color: var(--text-secondary);
+    color: var(--chase-dark);
 }
 
 .tx-details {
@@ -269,13 +276,13 @@ html, body {
 }
 
 .tx-date {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-secondary);
 }
 
 .tx-amount {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     text-align: right;
 }
 
@@ -351,7 +358,7 @@ html, body {
     color: var(--text-secondary);
 }
 
-.form-group input, .form-group select {
+.form-group input {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--border-color);
@@ -375,6 +382,23 @@ html, body {
     font-weight: 600;
     cursor: pointer;
     margin-top: 8px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+.detail-label {
+    color: var(--text-secondary);
+}
+
+.detail-value {
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 /* BOTTOM NAV */
@@ -411,6 +435,7 @@ html, body {
 
 .nav-item.active {
     color: var(--chase-blue);
+    font-weight: 700;
 }
 
 .nav-item svg {
@@ -419,33 +444,6 @@ html, body {
     stroke: currentColor;
     fill: none;
     stroke-width: 2;
-}
-
-/* HISTORY FILTERS */
-.filter-bar {
-    display: flex;
-    gap: 8px;
-    padding: 12px 16px;
-    overflow-x: auto;
-    background: #ffffff;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.filter-chip {
-    padding: 6px 14px;
-    border-radius: 20px;
-    background: var(--bg-gray);
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-    border: none;
-    cursor: pointer;
-}
-
-.filter-chip.active {
-    background: var(--chase-blue);
-    color: white;
 }
 
 .tx-count-banner {
@@ -474,15 +472,13 @@ html, body {
             </div>
         </div>
         <div class="header-right">
-            <button class="icon-btn" aria-label="Notifications">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            </button>
+            <span class="fdic-badge">FDIC</span>
         </div>
     </header>
 
     <!-- MAIN HOME VIEW -->
     <div id="homeView" class="view active">
-        <div class="card balance-card">
+        <div class="balance-card">
             <div class="account-type">Total Available Balance</div>
             <div class="account-number">Account: 9876-0048-2100</div>
             <div class="balance-label">Current Balance</div>
@@ -512,11 +508,8 @@ html, body {
 
     <!-- HISTORY PAGE VIEW -->
     <div id="historyView" class="view">
-        <div class="filter-bar">
-            <button class="filter-chip active">All Transactions</button>
-            <button class="filter-chip">Mortgage Fees</button>
-            <button class="filter-chip">Transfers</button>
-            <button class="filter-chip">Bank Fees</button>
+        <div class="search-container">
+            <input type="text" class="search-input" id="txSearchInput" placeholder="Search transactions (e.g. Harvest, Anderson, $180)..." onkeyup="filterTransactions()">
         </div>
 
         <div class="tx-count-banner">
@@ -560,7 +553,7 @@ html, body {
         <form id="sendForm">
             <div class="form-group">
                 <label>Recipient Name</label>
-                <input type="text" placeholder="e.g. Marcus Vance" required>
+                <input type="text" placeholder="e.g. James Anderson" required>
             </div>
             <div class="form-group">
                 <label>Account / Zelle Tag</label>
@@ -568,7 +561,7 @@ html, body {
             </div>
             <div class="form-group">
                 <label>Amount ($)</label>
-                <input type="number" placeholder="0.00" min="1" step="any" required>
+                <input type="number" placeholder="0.00" min="1" max="20000" step="any" required>
             </div>
             <button type="submit" class="btn-submit">Confirm Transfer</button>
         </form>
@@ -585,7 +578,7 @@ html, body {
         <form id="receiveForm">
             <div class="form-group">
                 <label>Request From</label>
-                <input type="text" placeholder="e.g. Sarah Jenkins" required>
+                <input type="text" placeholder="e.g. Michael Bennett" required>
             </div>
             <div class="form-group">
                 <label>Amount ($)</label>
@@ -596,63 +589,107 @@ html, body {
     </div>
 </div>
 
+<!-- TRANSACTION DETAIL MODAL -->
+<div class="modal" id="detailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Transaction Detail</div>
+            <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
+        </div>
+        <div id="modalDetailContent"></div>
+    </div>
+</div>
+
 <script>
 // INITIAL DATA & SETUP
 let currentBalance = 455527.52;
 
-// LIST OF USA NAMES FOR WIRE/TRANSFER TRANSACTIONS
-const usaNames = [
-    "Marcus Vance", "Sarah Jenkins", "Tyler Brooks", "Jessica Miller",
-    "Austin Reynolds", "Samantha Hayes", "Brandon Sterling", "Emily Watson",
-    "Christopher Davis", "Amanda Pearson", "David Holloway", "Megan Sullivan"
-];
-
+// 100 FOOD AND DRINKS VENDORS FROM USER LIST
 const foodVendors = [
-    "Whole Foods Market", "Trader Joe's", "Chipotle Mexican Grill", "Panera Bread",
-    "Starbucks Coffee", "Sweetgreen", "Chick-fil-A", "In-N-Out Burger", "Uber Eats"
+    "Fresh Valley Market", "Green Basket Foods", "Sunrise Grocery", "Harvest Corner Market", "Golden Apple Foods",
+    "Family Fresh Market", "Riverside Grocery", "Oak Street Foods", "Fresh Choice Market", "Country Basket Grocery",
+    "Blue River Market", "Neighborhood Foods", "Sunny Side Grocery", "Fresh Fields Market", "Pine Grove Foods",
+    "Liberty Market", "Maple Fresh Grocery", "Cornerstone Foods", "Grand Harvest Market", "Evergreen Grocery",
+    "Fresh Way Market", "Daily Basket Foods", "Meadow Grocery", "Market Square Foods", "Red Barn Market",
+    "Riverbend Grocery", "Home Harvest Foods", "Good Day Market", "Prime Basket Grocery", "Westside Fresh Market",
+    "Eastview Foods", "Garden Gate Grocery", "Fresh Roots Market", "Silver Oak Foods", "Family Basket Market",
+    "Bluebird Grocery", "Morning Harvest Foods", "Green Meadow Market", "Fresh Street Grocery", "Harvest Hill Foods",
+    "Lakeview Market", "Oak Valley Grocery", "Sunrise Fresh Foods", "Main Street Market", "Golden Harvest Grocery",
+    "Fresh Harbor Market", "Country Fresh Foods", "Valley View Grocery", "Northstar Market", "Pine Valley Foods",
+    "Fresh Corner Grocery", "Cedar Grove Market", "Simply Fresh Foods", "Good Harvest Grocery", "Lakeside Market",
+    "Red Maple Foods", "Green Valley Grocery", "Fresh Garden Market", "Westfield Foods", "Orchard Lane Grocery",
+    "River Market Foods", "Bright Basket Grocery", "Family Choice Market", "Fresh Path Foods", "Oak Ridge Grocery",
+    "Golden Basket Market", "Sunrise Valley Foods", "Blue Ridge Grocery", "Harvest Lane Market", "Fresh Point Foods",
+    "Maple Street Grocery", "Green Basket Market", "Corner Market Foods", "Country Lane Grocery", "Fresh Harbor Foods",
+    "Meadow Brook Market", "Silver Valley Grocery", "Daily Fresh Foods", "Grand Oak Market", "Riverstone Grocery",
+    "Fresh Life Market", "Garden Valley Foods", "Pine Street Grocery", "Morning Star Market", "Harvest House Foods",
+    "Greenfield Grocery", "Fresh Family Market", "Cedar Valley Foods", "Golden Grove Grocery", "Lake House Market",
+    "Bright Valley Foods", "Fresh Town Grocery", "Orchard Fresh Market", "West River Foods", "Neighborhood Basket",
+    "Sunny Valley Grocery", "Harvest Point Market", "Fresh Horizon Foods", "Maple Grove Grocery", "American Harvest Market"
 ];
 
-const retailVendors = [
-    "Chevron Gas Station", "Target Superstore", "Amazon.com Purchase",
-    "Apple Store Purchase", "CVS Pharmacy", "Home Depot"
+// 130 RECIPIENT NAMES FROM USER LIST
+const transferRecipients = [
+    "James Anderson", "Michael Bennett", "William Carter", "Robert Mitchell", "David Thompson",
+    "Christopher Parker", "Matthew Collins", "Daniel Brooks", "Joseph Morgan", "Andrew Cooper",
+    "Joshua Richardson", "Ethan Foster", "Alexander Hayes", "Benjamin Reed", "Samuel Peterson",
+    "Henry Watson", "Jacob Simmons", "Lucas Bennett", "Mason Turner", "Logan Phillips",
+    "Jackson Murphy", "Sebastian Ward", "Jack Henderson", "Owen Coleman", "Theodore Jenkins",
+    "Aiden Bailey", "Dylan Russell", "Nathan Griffin", "Caleb Butler", "Ryan Hamilton",
+    "Tyler Graham", "Brandon Fisher", "Justin Wallace", "Kevin Harper", "Jason Edwards",
+    "Brian Stevens", "Eric Patterson", "Adam Reynolds", "Aaron Dixon", "Sean Crawford",
+    "Thomas Bryant", "Charles Spencer", "Steven Porter", "Jonathan Mason", "Patrick Warren",
+    "Christian Webb", "Cameron Pierce", "Jordan Lawson", "Marcus Bennett", "Dominic Torres",
+    "Anthony Rivera", "Nicholas Flores", "Austin Chavez", "Adrian Morales", "Xavier Ramirez",
+    "Diego Castillo", "Carlos Mendoza", "Miguel Santos", "Gabriel Navarro", "Isaac Herrera",
+    "Sophia Mitchell", "Emma Anderson", "Olivia Carter", "Ava Thompson", "Isabella Parker",
+    "Noah Harrison", "Liam Donovan", "Connor Marshall", "Evan Sullivan", "Cole Franklin",
+    "Hunter Montgomery", "Zachary Caldwell", "Derek Whitaker", "Travis Douglas", "Marcus Chapman",
+    "Brandon Cross", "Justin Dawson", "Kyle Morrison", "Sean Maxwell", "Nathaniel Bishop",
+    "Wesley Knight", "Garrett Spencer", "Blake Thornton", "Trevor McCarthy", "Grant Harrison",
+    "Austin Fletcher", "Cameron Briggs", "Zachary Holden", "Colin Matthews", "Derek Lawson",
+    "Jeffrey Armstrong", "Raymond Elliott", "Kenneth Pearson", "Gregory Walsh", "Timothy Larson",
+    "Scott Bradley", "Stephen Wheeler", "Edward Franklin", "Richard Dalton", "George Barrett",
+    "Frank Morrison", "Patrick Sullivan", "Dennis Crawford", "Douglas Bennett", "Vincent Reynolds",
+    "Russell Montgomery", "Martin Caldwell", "Victor Henderson", "Marcus Thornton", "Derrick Foster",
+    "Shawn Marshall", "Wesley Parker", "Cory Mitchell", "Trevor Anderson", "Jason Coleman",
+    "Brandon Harper", "Kevin Sullivan", "Eric Dawson", "Adam Franklin", "Justin Morrison",
+    "Brian Caldwell", "Ryan Fletcher", "Tyler Montgomery", "Jason Bishop", "Nathan Warren",
+    "Christopher Lawson", "Daniel Whitaker", "Matthew Douglas", "Aaron Chapman", "Jonathan Cross"
 ];
 
-// GENERATE 399 REALISTIC TRANSACTIONS (FEB 2025 TO AUG 2026)
+// HELPER: SMALL AMOUNT BETWEEN $120 AND $300
+function getRandomSmallAmount() {
+    return -(Math.floor(Math.random() * (300 - 120 + 1)) + 120 + (Math.floor(Math.random() * 99) / 100)).toFixed(2);
+}
+
+// HELPER: LARGE AMOUNT BETWEEN $1,200 AND $20,000 FOR PERSON-TO-PERSON TRANSFERS
+function getRandomHighAmount() {
+    return -(Math.floor(Math.random() * (20000 - 1200 + 1)) + 1200 + (Math.floor(Math.random() * 99) / 100)).toFixed(2);
+}
+
+// GENERATE 399 REALISTIC TRANSACTIONS
 function generateTransactions() {
     const txs = [];
     
-    // Explicit Required Dates & Specific Amounts
     const mortAmounts = {
-        "Aug 20, 2026": -850.52,
-        "Jul 20, 2026": -850.18,
-        "Jun 20, 2026": -850.74,
-        "May 20, 2026": -850.33,
-        "Apr 20, 2026": -850.89,
-        "Mar 20, 2026": -850.45,
-        "Feb 20, 2026": -850.12,
-        "Jan 20, 2026": -850.60,
-        "Dec 20, 2025": -850.25,
-        "Nov 20, 2025": -850.91,
-        "Oct 20, 2025": -850.40,
-        "Sep 20, 2025": -850.15,
-        "Aug 20, 2025": -850.80,
-        "Jul 20, 2025": -850.30,
-        "Jun 20, 2025": -850.65,
-        "May 20, 2025": -850.22,
-        "Apr 20, 2025": -850.95,
-        "Mar 20, 2025": -850.10,
+        "Aug 20, 2026": -850.52, "Jul 20, 2026": -850.18, "Jun 20, 2026": -850.74,
+        "May 20, 2026": -850.33, "Apr 20, 2026": -850.89, "Mar 20, 2026": -850.45,
+        "Feb 20, 2026": -850.12, "Jan 20, 2026": -850.60, "Dec 20, 2025": -850.25,
+        "Nov 20, 2025": -850.91, "Oct 20, 2025": -850.40, "Sep 20, 2025": -850.15,
+        "Aug 20, 2025": -850.80, "Jul 20, 2025": -850.30, "Jun 20, 2025": -850.65,
+        "May 20, 2025": -850.22, "Apr 20, 2025": -850.95, "Mar 20, 2025": -850.10,
         "Feb 20, 2025": -850.50
     };
 
-    // Specific Highlight Transfers (Aug 2026 Descending)
-    txs.push({ name: "Wire Transfer to Marcus Vance", date: "Aug 22, 2026 • 04:15 PM", amount: -2800.00, type: "transfer" });
+    // Highlighted Initial Transfers
+    txs.push({ name: `Transfer to ${transferRecipients[0]}`, date: "Aug 22, 2026 • 04:15 PM", amount: -2800.00, type: "transfer" });
     txs.push({ name: "Mortgage fee", date: "Aug 20, 2026 • 08:00 AM", amount: mortAmounts["Aug 20, 2026"], type: "mortgage" });
-    txs.push({ name: "Transfer to Sarah Jenkins", date: "Aug 18, 2026 • 02:30 PM", amount: -3662.00, type: "transfer" });
+    txs.push({ name: `Transfer to ${transferRecipients[1]}`, date: "Aug 18, 2026 • 02:30 PM", amount: -3662.00, type: "transfer" });
     txs.push({ name: "Bank Maintenance Fee", date: "Aug 15, 2026 • 11:59 PM", amount: -200.00, type: "fee" });
-    txs.push({ name: "Wire Transfer to Tyler Brooks", date: "Aug 12, 2026 • 09:10 AM", amount: -5003.00, type: "transfer" });
-    txs.push({ name: "Transfer to Jessica Miller", date: "Aug 05, 2026 • 01:45 PM", amount: -2990.00, type: "transfer" });
+    txs.push({ name: `Wire Transfer to ${transferRecipients[2]}`, date: "Aug 12, 2026 • 09:10 AM", amount: -5003.00, type: "transfer" });
+    txs.push({ name: `Transfer to ${transferRecipients[3]}`, date: "Aug 05, 2026 • 01:45 PM", amount: -2990.00, type: "transfer" });
 
-    // Generate historic records back to Feb 2025
     const months = [
         { name: "Jul", year: 2026 }, { name: "Jun", year: 2026 }, { name: "May", year: 2026 },
         { name: "Apr", year: 2026 }, { name: "Mar", year: 2026 }, { name: "Feb", year: 2026 },
@@ -663,11 +700,12 @@ function generateTransactions() {
     ];
 
     let currentTxCount = txs.length;
+    let foodIndex = 0;
+    let recipientIndex = 4;
 
     months.forEach((m) => {
         const key = `${m.name} 20, ${m.year}`;
         
-        // Add 20th Mortgage Fee
         txs.push({
             name: "Mortgage fee",
             date: `${m.name} 20, ${m.year} • 08:00 AM`,
@@ -675,7 +713,6 @@ function generateTransactions() {
             type: "mortgage"
         });
 
-        // Add monthly bank fees from prompt (-100, -194, -293)
         const feeAmt = [ -100.00, -194.00, -293.00 ][Math.floor(Math.random() * 3)];
         txs.push({
             name: "Bank Maintenance Fee",
@@ -684,20 +721,24 @@ function generateTransactions() {
             type: "fee"
         });
 
-        // Fill remaining month with standard transactions (~20 per month to reach 399)
         for (let day = 27; day >= 1; day--) {
-            if (day === 20) continue; // Skip 20th to leave room for mortgage fee
+            if (day === 20) continue;
             
             if (Math.random() > 0.35 && currentTxCount < 399) {
                 const isFood = Math.random() > 0.4;
-                let txName, txAmount;
+                let txName, txAmount, txType;
 
                 if (isFood) {
-                    txName = foodVendors[Math.floor(Math.random() * foodVendors.length)];
-                    txAmount = -(90 + Math.random() * 20).toFixed(2); // Food ~$100
+                    txName = foodVendors[foodIndex % foodVendors.length];
+                    foodIndex++;
+                    txAmount = getRandomSmallAmount();
+                    txType = "food";
                 } else {
-                    txName = retailVendors[Math.floor(Math.random() * retailVendors.length)];
-                    txAmount = -(45 + Math.random() * 150).toFixed(2);
+                    const recipient = transferRecipients[recipientIndex % transferRecipients.length];
+                    recipientIndex++;
+                    txName = `Transfer to ${recipient}`;
+                    txAmount = getRandomHighAmount();
+                    txType = "transfer";
                 }
 
                 const hour = Math.floor(Math.random() * 12) + 1;
@@ -708,7 +749,7 @@ function generateTransactions() {
                     name: txName,
                     date: `${m.name} ${day < 10 ? '0' + day : day}, ${m.year} • ${hour < 10 ? '0' + hour : hour}:${min} ${ampm}`,
                     amount: parseFloat(txAmount),
-                    type: isFood ? "food" : "retail"
+                    type: txType
                 });
                 currentTxCount++;
             }
@@ -721,14 +762,14 @@ function generateTransactions() {
 const allTransactions = generateTransactions();
 
 // RENDER TRANSACTIONS
-function renderTransactions() {
+function renderTransactions(listToRender = allTransactions) {
     const recentContainer = document.getElementById('recentTxList');
     const fullContainer = document.getElementById('fullTxList');
 
     recentContainer.innerHTML = '';
     fullContainer.innerHTML = '';
 
-    allTransactions.forEach((tx, index) => {
+    listToRender.forEach((tx, index) => {
         const isNegative = tx.amount < 0;
         const formattedAmount = (isNegative ? '-$' : '+$') + Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         
@@ -742,7 +783,7 @@ function renderTransactions() {
         }
 
         const html = `
-            <div class="tx-item">
+            <div class="tx-item" onclick="showTxDetail(${index})">
                 <div class="tx-icon">${iconSvg}</div>
                 <div class="tx-details">
                     <div class="tx-name">${tx.name}</div>
@@ -752,17 +793,40 @@ function renderTransactions() {
             </div>
         `;
 
-        // Add first 10 items to Home view
         if (index < 10) {
             recentContainer.innerHTML += html;
         }
 
-        // Add all items to History view
         fullContainer.innerHTML += html;
     });
 }
 
-// VIEW SWITCHING
+function filterTransactions() {
+    const query = document.getElementById('txSearchInput').value.toLowerCase();
+    const filtered = allTransactions.filter(tx => 
+        tx.name.toLowerCase().includes(query) || 
+        tx.amount.toString().includes(query) ||
+        tx.date.toLowerCase().includes(query)
+    );
+    renderTransactions(filtered);
+}
+
+function showTxDetail(index) {
+    const tx = allTransactions[index];
+    const modalContent = document.getElementById('modalDetailContent');
+    
+    modalContent.innerHTML = `
+        <div class="detail-row"><span class="detail-label">Merchant / Recipient</span><span class="detail-value">${tx.name}</span></div>
+        <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value">$${Math.abs(tx.amount).toLocaleString('en-US', {minimumFractionDigits: 2})}</span></div>
+        <div class="detail-row"><span class="detail-label">Date & Time</span><span class="detail-value">${tx.date}</span></div>
+        <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value">Posted</span></div>
+        <div class="detail-row"><span class="detail-label">Account</span><span class="detail-value">Premier Checking (••4821)</span></div>
+        <div class="detail-row"><span class="detail-label">Transaction ID</span><span class="detail-value">CHK-${Math.floor(10000000 + Math.random() * 90000000)}</span></div>
+    `;
+    
+    document.getElementById('detailModal').classList.add('active');
+}
+
 function switchView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -778,7 +842,6 @@ function switchView(viewId) {
     window.scrollTo(0, 0);
 }
 
-// MODALS
 function openModal(modalId) {
     document.getElementById(modalId).classList.add('active');
 }
@@ -787,7 +850,6 @@ function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('active');
 }
 
-// FORM HANDLING
 document.getElementById('sendForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const recipient = this.querySelector('input[type="text"]').value;
@@ -801,7 +863,6 @@ document.getElementById('sendForm').addEventListener('submit', function(e) {
     currentBalance -= amount;
     updateBalanceDisplay();
 
-    // Add transaction to list
     const now = new Date();
     const timeStr = now.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) + ' • Just now';
     
@@ -832,7 +893,6 @@ function updateBalanceDisplay() {
     document.getElementById('mainBalanceDisplay').textContent = '$' + currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// INITIALIZE
 renderTransactions();
 </script>
 
